@@ -58,36 +58,63 @@
 			<artifactId>objectify</artifactId>
 			<version>5.1.22</version>
 		</dependency>
-<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-<dependency>
-	<groupId>org.projectlombok</groupId>
-	<artifactId>lombok</artifactId>
-	<version>1.16.20</version>
-	<scope>provided</scope>
-</dependency>
-<dependency>
-	<groupId>com.google.appengine</groupId>
-	<artifactId>appengine-api-stubs</artifactId>
-	<version>${appengine.sdk.version}</version>
-	<scope>test</scope>
-</dependency>
-<dependency>
-	<groupId>com.google.appengine</groupId>
-	<artifactId>appengine-tools-sdk</artifactId>
-	<version>${appengine.sdk.version}</version>
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.20</version>
+			<scope>provided</scope>
+		</dependency>
 
-</dependency>
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-stubs</artifactId>
+			<version>${appengine.sdk.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-tools-sdk</artifactId>
+			<version>${appengine.sdk.version}</version>
+			<scope>test</scope>
+		</dependency>
 
-<dependency>
-	<groupId>com.google.appengine</groupId>
-	<artifactId>appengine-testing</artifactId>
-	<version>${appengine.sdk.version}</version>
-</dependency>
-<dependency>
-<groupId>com.google.appengine</groupId>
-<artifactId>appengine-api-1.0-sdk</artifactId>
-<version>${appengine.sdk.version}</version>
-</dependency>
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-testing</artifactId>
+			<version>${appengine.sdk.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-1.0-sdk</artifactId>
+			<version>${appengine.sdk.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>3.3.7-1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>font-awesome</artifactId>
+			<version>4.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>webjars-locator</artifactId>
+			<version>0.32-1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency> 
 	</dependencies>
 
 	<build>
@@ -96,13 +123,24 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>com.google.appengine</groupId>
-				<artifactId>appengine-maven-plugin</artifactId>
-				<version>1.9.60</version>
-			</plugin>
-		</plugins>
-	</build>
+			<!-- <plugin>
+		<groupId>com.google.appengine</groupId>
+		<artifactId>appengine-maven-plugin</artifactId>
+		<version>1.9.60</version>
+	    </plugin>-->
+	    <plugin>
+		    <groupId>com.google.cloud.tools</groupId>
+		    <artifactId>appengine-maven-plugin</artifactId>
+		    <version>1.3.1</version>
+		    <configuration>
+			    <port>8080</port>
+			    <environment>
+				    <DEV_APP_SERVER>true</DEV_APP_SERVER>
+			    </environment>
+		    </configuration>
+	    </plugin>
+    </plugins>
+    </build>
 
 
 </project>

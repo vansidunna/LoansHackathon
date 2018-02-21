@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script type='text/javascript' src='/webjars/jquery/jquery.min.js'
+            th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type='text/javascript' src='/webjars/bootstrap/js/bootstrap.min.js'
+            th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <style type="text/css">
+        body {
+            margin-top: 100px;
+        }
+    </style>
+</head>
+
+<div th:replace="header::header">&nbsp;</div>
+
+<body>
+
+<div class="container">
+    <div class="modal-dialog">
+        <div class="loginmodal-container">
+            <p>Loan Request</p>
+            <br/>
+            <form method="post" action="/loan" th:object="${loanRequest}">
+                <input type="hidden" name="id" th:field="*{id}"/>
+                <input type="text" name="purpose" th:field="*{purpose}" placeholder="Purpose"/>
+                <input type="number" name="amount" th:field="*{amount}" placeholder="Loan Amount"/>
+                <input type="submit" name="Save" class="login loginmodal-submit" value="Save"/>
+            </form>
+
+            <span class="label label-success" th:if="${success != null}" th:text="${success}"></span>
+            <span class="label label-danger" th:if="${error != null}" th:text="${error}"></span>
+        </div>
+    </div>
+</div>
+
+</body>
+
+
+<div th:replace="footer::footer">&nbsp;</div>
+
+
+</html>
+
+
+
+

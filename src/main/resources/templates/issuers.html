@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Issuers Management</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script type='text/javascript' src='/webjars/jquery/jquery.min.js'
+            th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type='text/javascript' src='/webjars/bootstrap/js/bootstrap.min.js'
+            th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <style type="text/css">
+        body {
+            margin-top: 100px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div th:replace="admin/header::header">&nbsp;</div>
+
+<div class="container">
+
+    <section class="hidden-print">
+        <p class="lead">Loans</p>
+    </section>
+
+
+    <section>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">All Loans</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Issuer Id</th>
+                        <th>Certificate</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="i:${issuers}">
+                        <td><a th:href="@{'/admin/issuers/' + ${i.issuerId}}" th:text="${i.issuerId}"></a></td>
+                        <td><a th:href="@{/download-certificate(serialNumber=${i.certificateSerialNumber})}" th:text="${i.certificateSerialNumber}">Certificate</a></td>
+                        <td th:text="${i.name}">Name</td>
+                        <td th:text="${i.email}">Email</td>
+                        <td th:text="${i.phoneNumber}">Phone</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">New Issuer</h3>
+            </div>
+            <div class="panel-body">
+                <form action="/admin/issuers" th:action="@{/admin/issuers}" th:object="${issuer}"  method="post">
+
+                    <div class="form-group">
+                        <label for="issuerId">Issuer Id</label>
+                        <input type="text" class="form-control" th:field="*{issuerId}" id="issuerId" placeholder="Issuer Id"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="certificateSerialNumber">Certificate Serial Number</label>
+                        <input type="text" class="form-control" th:field="*{certificateSerialNumber}" id="certificateSerialNumber" placeholder="Certificate Serial Number"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input required="required" type="text" class="form-control" th:field="*{name}" id="name" placeholder="Business Name"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input required="required" type="email" class="form-control" th:field="*{email}" id="email" placeholder="Email Address"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input required="required" type="tel" class="form-control" th:field="*{phoneNumber}" id="phoneNumber" placeholder="Phone Number"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postalAddress">Postal Address</label>
+                        <textarea rows="5" class="form-control" th:field="*{postalAddress}" id="postalAddress" placeholder="Postal Address"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="certificateRequestEncoded">Certificate Request (PEM)</label>
+                        <textarea rows="5" class="form-control" th:field="*{certificateRequestEncoded}" id="certificateRequestEncoded" placeholder="Certificate Request in PEM format"></textarea>
+                    </div>
+
+                    <input type="submit" class="btn btn-primary" value="Save"/>
+                    <span class="label label-success" th:if="${success != null}" th:text="${success}"></span>
+                    <span class="label label-danger" th:if="${error != null}" th:text="${error}"></span>
+
+                </form>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
+</body>
+
+<div th:replace="footer::footer">&nbsp;</div>
+
+
+</html>
+
+
+
+

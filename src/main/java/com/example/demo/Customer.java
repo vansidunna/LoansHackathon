@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
 import lombok.*;
 
- 
 
 @Cache
 @Entity
@@ -18,15 +16,14 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-
-public class Request {
+public class Customer {
 
     @Id
     @NonNull
-    private Long id;
+    private String id;
 
     private String name;
     private String bsn;
-    private Long amount;
+    private Long salary;
 
 }

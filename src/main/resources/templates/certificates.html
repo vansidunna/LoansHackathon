@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Root Certificate Management</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script type='text/javascript' src='/webjars/jquery/jquery.min.js'
+            th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type='text/javascript' src='/webjars/bootstrap/js/bootstrap.min.js'
+            th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <style type="text/css">
+        body {
+            margin-top: 100px;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div th:replace="admin/header::header">&nbsp;</div>
+
+<div class="container">
+
+    <section class="hidden-print">
+        <p class="lead">Manage CA Certificates</p>
+    </section>
+
+
+    <section th:if="${not #lists.isEmpty(certificates)}">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">All CA Certificates</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Serial Number</th>
+                        <th>Key</th>
+                        <th>Certificate</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="c:${certificates}">
+                        <td th:text="${c.serialNumber}">Serial Number</td>
+                        <td><a th:href="@{/admin/download-key(serialNumber=${c.serialNumber})}">Download</a></td>
+                        <td><a th:href="@{/download-certificate(serialNumber=${c.serialNumber})}">Download</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section th:if="${#lists.isEmpty(certificates)}">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">No CA Certificates</h3>
+            </div>
+            <div class="panel-body">
+                <form action="/admin/certificates" th:action="@{/admin/certificates}" method="post">
+                    <!--button type="submit" class="btn btn-primary btn-large" th:text="Setup">Setup</button-->
+                    <input type="submit" class="btn btn-primary" value="Setup"/>
+                    <span class="label label-success" th:if="${success != null}">${success}</span>
+                    <span class="label label-danger" th:if="${error != null}">${error}</span>
+                </form>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
+</body>
+
+<div th:replace="footer::footer">&nbsp;</div>
+
+
+</html>
+
+
+
+

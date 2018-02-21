@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+</head>
+
+<body>
+
+<nav th:fragment="header" class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" th:href="@{/}">PSD2 Loans</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li th:classappend="${module == 'loans' ? 'active' : ''}">
+                    <a href="#" th:href="@{/loans}">Loans</a>
+                </li>
+                <li th:classappend="${module == 'me' ? 'active' : ''}">
+                    <a href="#" th:href="@{/me}">Me</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" th:href="@{/logout}">
+                        <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</nav>
+
+</body>
+</html>
