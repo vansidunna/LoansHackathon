@@ -32,4 +32,9 @@ public class LoanRequestRepo {
         return ObjectifyService.run(() -> ofy().load().type(LoanRequest.class).list());
     }
 
+
+    public List<LoanRequest> fetchByCustomerId(String customerId) {
+        return ObjectifyService.run(() -> ofy().load().type(LoanRequest.class).filter("customerId", customerId).list());
+    }
+
 }

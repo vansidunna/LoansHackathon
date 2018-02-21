@@ -5,16 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Optional;
+import org.springframework.web.client.RestTemplate;
 
 @Controller
 @Slf4j
@@ -33,6 +32,16 @@ public class FrontendController {
     public static class Login {
         private String user;
         private String pass;
+    }
+
+    @Data
+    public static class BankLoanRequestStatus {
+        private Long id;
+        private Long amount;
+        private String purpose;
+        private Long approvedAmount;
+        private Long interestRate;
+        private String comments;
     }
 
     private Optional<String> getUserName(HttpServletRequest request) {
@@ -86,6 +95,13 @@ public class FrontendController {
         customerRepo.saveCustomer(customer);
         modelAndView.addObject("customer", customer);
         modelAndView.setViewName("me");
+
+/*
+        RestTemplate restTemplate = new RestTemplate();
+        HackathonLoan loan = HackathonLoan.builder().borrowed(100).customerId("64d4b686-8b65-5ec5-a52b-53a444e69327").build();
+        restTemplate.postForEntity("http://psd2loans.automize.org/api/v1/nakamoto/64d4b686-8b65-5ec5-a52b-53a444e69327/loans", loan, HackathonLoan.class);
+*/
+
         return modelAndView;
     }
 
@@ -108,6 +124,64 @@ public class FrontendController {
         return modelAndView;
     }
 
+    @GetMapping("/loans")
+    public ModelAndView loans(@CookieValue(value = "user") String userName) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("module", "loans");
+        modelAndView.addObject("loanRequests", loanRequestRepo.fetchByCustomerId(userName));
+        modelAndView.setViewName("loans");
+        return modelAndView;
+    }
+
+    @GetMapping("/bank/{bankId}")
+    public ModelAndView bankLoans(@CookieValue(value = "user") String userName, @PathVariable("bankId") String bankId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("module", "bank");
+        List<BankLoanRequest> bankLoanRequests = bankLoanRequestRepo.fetchByBankId(bankId);
+        BankLoanRequest bankLoanRequest = bankLoanRequests.get(0);
+        modelAndView.addObject("bankRequest", bankLoanRequest);
+        modelAndView.addObject("bankRequests", bankLoanRequestRepo.fetchByBankId(bankId));
+        modelAndView.addObject("bankId", bankId);
+        modelAndView.setViewName("bank");
+        return modelAndView;
+    }
+
+
+    @GetMapping("/bank/{bankId}/{loanId}")
+    public ModelAndView bankLoan(@CookieValue(value = "user") String userName, @PathVariable("bankId") String bankId, @PathVariable(value = "loanId", required = false) Long loanId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("module", "bank");
+        BankLoanRequest loanRequest = bankLoanRequestRepo.get(loanId).get();
+        if (loanId != null && loanId > 0) {
+            modelAndView.addObject("bankRequest", bankLoanRequestRepo.get(loanId));
+        }
+        modelAndView.addObject("bankRequests", bankLoanRequestRepo.fetchByBankId(bankId));
+        modelAndView.addObject("bankId", bankId);
+        modelAndView.setViewName("bank");
+        return modelAndView;
+    }
+
+   @PostMapping("/saveBankLoanStatus")
+   public ModelAndView saveBankLoanAction(@ModelAttribute BankLoanRequest bankLoanRequest) {
+       ModelAndView modelAndView = new ModelAndView();
+
+       log.info("bankLoanRequestStatus({})", bankLoanRequest);
+
+       return modelAndView;
+   }
+
+   @GetMapping("/loan/{loanId}")
+   public ModelAndView loan(@CookieValue(value = "user") String userName, @PathVariable("loanId") Long loanId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("module", "loan");
+        LoanRequest loanRequest = loanRequestRepo.get(loanId).get();
+        modelAndView.addObject("loanRequest", loanRequest);
+        modelAndView.addObject("bankRequests", bankLoanRequestRepo.fetchByLoanRequestId(loanRequest.getId()));
+        modelAndView.setViewName("loan");
+        return modelAndView;
+    }
+
+
     @PostMapping("/loan")
     public ModelAndView createLoan(@CookieValue(value = "user") String userName, @ModelAttribute LoanRequest loanRequest) {
         Customer customer = customerRepo.fetchCustomer(userName).orElseThrow(() -> new RuntimeException("Not logged In"));
@@ -117,13 +191,12 @@ public class FrontendController {
         loanRequestRepo.save(loanRequest);
         modelAndView.addObject("loanRequest", loanRequest);
         SendLoanRequestToBanks(loanRequest);
-        modelAndView.setViewName("loan");
+        modelAndView.setViewName("redirect:/loan/" + loanRequest.getId());
         return modelAndView;
     }
 
-    @PostMapping("/banks")
-    public ModelAndView SendLoanRequestToBanks(@ModelAttribute LoanRequest loanRequest) {
-        ModelAndView modelAndView = new ModelAndView();
+
+    public void SendLoanRequestToBanks(LoanRequest loanRequest) {
         BankLoanRequest bankLoanRequest1 = BankLoanRequest.builder().bankId("ING").build();
         bankLoanRequest1.setLoanRequest(loanRequest);
         BankLoanRequest bankLoanRequest2 = BankLoanRequest.builder().bankId("ABN").build();
@@ -133,10 +206,6 @@ public class FrontendController {
         bankLoanRequestRepo.save(bankLoanRequest1);
         bankLoanRequestRepo.save(bankLoanRequest2);
         bankLoanRequestRepo.save(bankLoanRequest3);
-        modelAndView.addObject("bankLoanRequest1", bankLoanRequest1);
-        modelAndView.addObject("bankLoanRequest2", bankLoanRequest2);
-        modelAndView.addObject("bankLoanRequest3", bankLoanRequest3);
-        return modelAndView;
     }
 
 

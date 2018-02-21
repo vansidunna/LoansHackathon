@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script type='text/javascript' src='/webjars/jquery/jquery.min.js'
+            th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type='text/javascript' src='/webjars/bootstrap/js/bootstrap.min.js'
+            th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <style type="text/css">
+        body {
+            margin-top: 100px;
+        }
+    </style>
+</head>
+
+<div th:replace="header::header">&nbsp;</div>
+
+<body>
+
+<div class="container">
+
+
+    <section th:if="${not #lists.isEmpty(loanRequests)}">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Loans</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Amount</th>
+                        <th>Purpose</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="r:${loanRequests}">
+                        <td><a th:text="${r.id}" href="/loan/${r.id}">Download</a></td>
+                        <td th:text="${r.amount}"></td>
+                        <td th:text="${r.purpose}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+
+</div>
+
+</body>
+
+
+<div th:replace="footer::footer">&nbsp;</div>
+
+
+</html>
+
+
+
+

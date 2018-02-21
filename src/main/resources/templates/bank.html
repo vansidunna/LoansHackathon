@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
+    <title th:text="${bankId}">Bank</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"
           th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
@@ -29,10 +29,13 @@
                 <h3 class="panel-title">Loan Request</h3>
             </div>
             <div class="panel-body">
-                <form method="post" action="/loan" th:object="${loanRequest}">
+                <form method="post" action="/saveBankLoanStatus"  th:object="${bankRequest}">
                     <input type="hidden" name="id" th:field="*{id}"/>
-                    <input type="text" name="purpose" th:field="*{purpose}" placeholder="Purpose"/>
-                    <input type="number" name="amount" th:field="*{amount}" placeholder="Loan Amount"/>
+                    <input type="number" name="amount" th:field="*{amount}" placeholder="Approved Amount" readonly="true"/>
+                    <input type="text" name="purpose" th:field="*{purpose}" placeholder="Interest Rate" readonly="true"/>
+                    <input type="number" name="approvedAmount" th:field="*{approvedAmount}" placeholder="Approved Amount"/>
+                    <input type="number" name="interestRate" th:field="*{interestRate}" placeholder="Interest Rate"/>
+                    <input type="text" name="comments" th:field="*{comments}" placeholder="Comments"/>
                     <input type="submit" name="Save" class="login loginmodal-submit" value="Save"/>
                 </form>
             </div>
@@ -43,13 +46,13 @@
     <section th:if="${not #lists.isEmpty(bankRequests)}">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Banks Status</h3>
+                <h3 class="panel-title">Loan Requests</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>Bank</th>
+                        <th>Id</th>
                         <th>Amount Approved</th>
                         <th>Interest Rate</th>
                         <th>Comments</th>
@@ -58,7 +61,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="r:${bankRequests}">
-                        <td th:text="${r.bankId}"></td>
+                        <td th:text="${r.id}"></td>
                         <td th:text="${r.approvedAmount}"></td>
                         <td th:text="${r.interestRate}"></td>
                         <td th:text="${r.comments}"></td>

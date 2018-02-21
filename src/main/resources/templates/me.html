@@ -23,7 +23,7 @@
 <div class="container">
     <div class="modal-dialog">
         <div class="loginmodal-container">
-            <h1>Logged In as <span th:text="${user}"/></h1>
+            <h1>Logged In as <span th:text="${customer.name}"/></h1>
             <br/>
             <form method="post" action="/me" th:object="${customer}">
                 <input type="hidden" name="id" th:field="*{id}"/>

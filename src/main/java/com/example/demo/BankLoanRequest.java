@@ -35,6 +35,7 @@ public class BankLoanRequest {
     private String comments;
 
 
+    @Index
     private Long loanRequestId;
 
     private double amount;
