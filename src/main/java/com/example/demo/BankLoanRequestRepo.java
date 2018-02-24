@@ -37,6 +37,7 @@ public class BankLoanRequestRepo {
         return ObjectifyService.run(() -> ofy().load().type(BankLoanRequest.class).filter("loanRequestId", loanRequestId).list());
     }
 
+
     public List<BankLoanRequest> fetchByBankId(String bankId) {
         return ObjectifyService.run(() -> ofy().load().type(BankLoanRequest.class).filter("bankId", bankId).list());
     }

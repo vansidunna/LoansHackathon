@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.web.client.RestTemplate;
 
@@ -82,8 +83,8 @@ public class FrontendController {
     public ModelAndView me(@CookieValue(value = "user") String userName, @ModelAttribute Customer customer) {
         ModelAndView modelAndView = new ModelAndView();
         customerRepo.saveCustomer(customer);
-        modelAndView.addObject("customer", customer);
-        modelAndView.setViewName("me");
+        modelAndView.addObject("customer", userName);
+        modelAndView.setViewName("redirect:/");
 
 /*
         RestTemplate restTemplate = new RestTemplate();
@@ -123,9 +124,13 @@ public class FrontendController {
     }
 
     @GetMapping("/bank/{bankId}")
-    public ModelAndView bankLoans(@CookieValue(value = "user") String userName, @PathVariable("bankId") String bankId) {
+    public ModelAndView bankLoans(@PathVariable("bankId") String bankId) {
+        log.info("bankId({})", bankId);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("module", "bank");
+        List<BankLoanRequest> bankLoanRequests = bankLoanRequestRepo.fetchByBankId(bankId);
+        BankLoanRequest bankLoanRequest = bankLoanRequests.get(0);
+        modelAndView.addObject("bankRequest", bankLoanRequest);
         modelAndView.addObject("bankRequests", bankLoanRequestRepo.fetchByBankId(bankId));
         modelAndView.addObject("bankId", bankId);
         modelAndView.setViewName("bank");
@@ -147,9 +152,33 @@ public class FrontendController {
         return modelAndView;
     }
 
+   @PostMapping("/saveBankLoanStatus")
+   public ModelAndView saveBankLoanAction(@ModelAttribute BankLoanRequest bankLoanRequest) {
+       ModelAndView modelAndView = new ModelAndView();
 
-    @GetMapping("/loan/{loanId}")
-    public ModelAndView loan(@CookieValue(value = "user") String userName, @PathVariable("loanId") Long loanId) {
+       log.info("bankLoanRequestStatus({})", bankLoanRequest);
+
+       bankLoanRequest.setApproved(true);
+       bankLoanRequestRepo.save(bankLoanRequest);
+       String bankId = bankLoanRequest.getBankId();
+       modelAndView.addObject("bankRequests", bankLoanRequestRepo.fetchByBankId(bankId));
+       modelAndView.setViewName("redirect:/bank/" + bankId);
+
+       return modelAndView;
+   }
+
+    @GetMapping(value="/createBankLoan")
+    public ModelAndView createBankLoan() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        log.info("createBankLoan");
+        modelAndView.setViewName("createBankLoan");
+
+        return modelAndView;
+    }
+
+   @GetMapping("/loan/{loanId}")
+   public ModelAndView loan(@CookieValue(value = "user") String userName, @PathVariable("loanId") Long loanId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("module", "loan");
         LoanRequest loanRequest = loanRequestRepo.get(loanId).get();

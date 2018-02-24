@@ -29,8 +29,14 @@
                 <h3 class="panel-title">Loan Request</h3>
             </div>
             <div class="panel-body">
-                <form method="post" th:object="${bankRequest}">
+                <form method="post" action="/saveBankLoanStatus"  th:object="${bankRequest}">
                     <input type="hidden" name="id" th:field="*{id}"/>
+                    <input type="hidden" name="loanRequestId" th:field="*{loanRequestId}"/>
+                    <input type="hidden" name="bankId" th:field="*{bankId}"/>
+                    <input type="hidden" name="customerId" th:field="*{customerId}"/>
+                    <input type="hidden" name="name" th:field="*{name}"/>
+                    <input type="hidden" name="bsn" th:field="*{bsn}"/>
+                    <input type="hidden" name="salary" th:field="*{salary}"/>
                     <input type="number" name="amount" th:field="*{amount}" placeholder="Approved Amount" readonly="true"/>
                     <input type="text" name="purpose" th:field="*{purpose}" placeholder="Interest Rate" readonly="true"/>
                     <input type="number" name="approvedAmount" th:field="*{approvedAmount}" placeholder="Approved Amount"/>

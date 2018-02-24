@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>CreateLoanAccount</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script type='text/javascript' src='/webjars/jquery/jquery.min.js'
+            th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type='text/javascript' src='/webjars/bootstrap/js/bootstrap.min.js'
+            th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <style type="text/css">
+        body {
+            margin-top: 100px;
+        }
+    </style>
+</head>
+
+<div th:replace="header::header">&nbsp;</div>
+
+<body>
+
+<h1 class="panel-title"><strong>Congratulations!! Your Loan account has been created successfully</strong></h1>
+
+</body>
+
+
+<div th:replace="footer::footer">&nbsp;</div>
+
+
+</html>

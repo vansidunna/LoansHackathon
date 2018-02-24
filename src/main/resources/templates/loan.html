@@ -58,13 +58,16 @@
                     </thead>
                     <tbody>
                     <tr th:each="r:${bankRequests}">
-                        <td th:text="${r.bankId}"></td>
+                        <td th:text="${r.bankId}">
+                        </td>
                         <td th:text="${r.approvedAmount}"></td>
                         <td th:text="${r.interestRate}"></td>
                         <td th:text="${r.comments}"></td>
                         <td th:text="${r.approved}"></td>
+                        <td th:if="${r.approved}"><button onclick="location.href='/createBankLoan'">Apply</button></td>
                     </tr>
                     </tbody>
+
                 </table>
             </div>
         </div>
